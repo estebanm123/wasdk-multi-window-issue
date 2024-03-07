@@ -28,10 +28,15 @@ namespace winrt::SampleAppCppWinRT::implementation
 
     Windows::Foundation::IAsyncAction MainPage::CreateCppWindowOnNewThreadClicked(Windows::Foundation::IInspectable const&, RoutedEventArgs const&)
     {
-        auto window = co_await CreateNewCppWindowOnNewThread();
-        auto token = window.Closed({ this, &MainPage::WindowClosed });
-        m_windows.push_back(window);
-        m_tokens.push_back(token);
+        co_await winrt::resume_background();
+
+         CreateNewCppWindowOnNewThread(); CreateNewCppWindowOnNewThread();
+         CreateNewCppWindowOnNewThread();
+         //CreateNewCppWindowOnNewThread();
+        //auto token = window.Closed({ this, &MainPage::WindowClosed });
+        //m_windows.push_back(window);
+        //m_tokens.push_back(token);
+         co_return;
     }
 
     void MainPage::CreateCsWindowOnMainThreadClicked(Windows::Foundation::IInspectable const&, RoutedEventArgs const&)
@@ -66,24 +71,31 @@ namespace winrt::SampleAppCppWinRT::implementation
 
     Windows::Foundation::IAsyncOperation<Microsoft::UI::Xaml::Window> MainPage::CreateNewCppWindowOnNewThread()
     {
-        auto windowCreationEvent = concurrency::task_completion_event<Window>();
+        auto windowCreationEvent = concurrency::task_completion_event<void>();
         auto task = concurrency::create_task(windowCreationEvent);
 
-        auto thread = std::thread([=]()
+        Microsoft::UI::Dispatching::DispatcherQueue dq = nullptr;
+        auto thread = std::thread([windowCreationEvent, this, &dq]()
             {
                 winrt::init_apartment(winrt::apartment_type::single_threaded);
 
-                Microsoft::UI::Xaml::Application::Start([=](auto&&)
+                Microsoft::UI::Xaml::Application::Start([windowCreationEvent, this, &dq](auto&&)
                     {
+                        OutputDebugStringW(L"!~ starting callback..\n");
+                        dq = Microsoft::UI::Dispatching::DispatcherQueue::GetForCurrentThread();
                         auto window = CreateNewCppWindow();
-                        windowCreationEvent.set(window);
+                        windowCreationEvent.set();
+                        OutputDebugStringW(L"!~ ending callback..\n");
                     });
             });
 
         thread.detach();
 
-        auto window = co_await task;
-        co_return window;
+        co_await task;
+
+        printf("Has threadaccess: %d\n", dq.HasThreadAccess());
+
+        co_return nullptr;
     }
 
 
@@ -100,6 +112,7 @@ namespace winrt::SampleAppCppWinRT::implementation
     Microsoft::UI::Xaml::Window MainPage::CreateNewCppWindow()
     {
         auto window = Microsoft::UI::Xaml::Window();
+        // TODO: maybe try sleeping
         window.Title(L"SecondaryWindow");
         window.Content(UICppWinRT::MyPageCppWinRT());
         window.Activate();
