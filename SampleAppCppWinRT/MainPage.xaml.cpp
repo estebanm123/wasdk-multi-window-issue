@@ -39,9 +39,10 @@ namespace winrt::SampleAppCppWinRT::implementation
         auto windowData = std::make_shared<WindowData>();
         auto thread = std::thread([=]()
             {
+                Log("Created new UI thread");
+
                 winrt::init_apartment(winrt::apartment_type::single_threaded);
 
-                Log("Created thread");
                 Microsoft::UI::Xaml::Application::Start([=](auto&&)
                     {
                         Log("Application::Start callback started");
@@ -51,7 +52,8 @@ namespace winrt::SampleAppCppWinRT::implementation
                         auto window = windowData->window;
 
                         windowCreationEvent.set();
-                        Log("Exiting Application::Start callback");
+
+                        Log("Application::Start callback ended");
                     }
                 );
 
@@ -62,8 +64,8 @@ namespace winrt::SampleAppCppWinRT::implementation
 
         Log("Wait for completion event");
         co_await task;
-        Log("Enqueing window setup");
 
+        Log("Enqueing window setup");
         windowData->dq.TryEnqueue(
         [windowData]()
         {
