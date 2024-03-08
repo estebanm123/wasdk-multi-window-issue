@@ -44,13 +44,12 @@ namespace winrt::SampleAppCppWinRT::implementation
                 Log("Created thread");
                 Microsoft::UI::Xaml::Application::Start([=](auto&&)
                     {
-                        Log("Application::Start callback started")
+                        Log("Application::Start callback started");
 
                         windowData->dq = Microsoft::UI::Dispatching::DispatcherQueue::GetForCurrentThread();
                         windowData->window = Microsoft::UI::Xaml::Window();
                         auto window = windowData->window;
 
-                        Log("Notifying window created");
                         windowCreationEvent.set();
                         Log("Exiting Application::Start callback");
                     }
@@ -68,7 +67,7 @@ namespace winrt::SampleAppCppWinRT::implementation
         windowData->dq.TryEnqueue(
         [windowData]()
         {
-            Log("Setting up window. Does the thread have DQ access? {}", windowData->dq.HasThreadAccess());
+            Log("Setting up window. Does the DQ have thread access? {}", windowData->dq.HasThreadAccess());
 
             auto window = windowData->window;
             window.Title(L"SecondaryWindow");

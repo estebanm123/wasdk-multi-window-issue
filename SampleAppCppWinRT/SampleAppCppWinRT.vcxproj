@@ -152,9 +152,6 @@
     <ProjectReference Include="..\UICppWinRT\UICppWinRT.vcxproj">
       <Project>{c1489856-e577-4554-b4c8-cdf64bc75384}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\UICsWinRT\UICsWinRT.csproj">
-      <Project>{0a11249c-2dd1-4243-b967-9082acec678b}</Project>
-    </ProjectReference>
   </ItemGroup>
   <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution
