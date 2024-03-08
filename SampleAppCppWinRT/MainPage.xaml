@@ -13,16 +13,12 @@
         VerticalAlignment="Center"
         Orientation="Vertical">
         <Button
+            Background="DarkGreen"
+            Click="CreateSingleCppWindowOnNewThreadClicked"
+            Content="Create a single window." />
+        <Button
             Background="DarkRed"
-            Click="CreateCsWindowOnNewThreadClicked"
-            Content="Create window with C# page on new thread. (LEAKING)" />
-        <Button
-            Background="DarkGreen"
-            Click="CreateCppWindowOnNewThreadClicked"
-            Content="Create window with C++/WinRT page on new thread." />
-        <Button
-            Background="DarkGreen"
-            Click="CreateCsWindowOnMainThreadClicked"
-            Content="Create window with C# page on main thread." />
+            Click="Create2CppWindowsOnNewThreadClicked"
+            Content="Create 2 windows - problematic." />
     </StackPanel>
 </Page>

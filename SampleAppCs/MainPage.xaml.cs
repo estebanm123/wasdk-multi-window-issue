@@ -30,7 +30,7 @@ namespace SampleApp
             await CreateAndClose50WindowOnNewThread<CSharp.MyPage>();
         }
 
-        private async void CreateCppWindowOnNewThreadClicked(object sender, RoutedEventArgs e)
+        private async void CreateSingleCppWindowOnNewThreadClicked(object sender, RoutedEventArgs e)
         {
             await CreateWindowOnNewThreadThread<CppWinRT.MyPageCppWinRT>();
         }
