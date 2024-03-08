@@ -25,6 +25,3 @@
 #include <wil/cppwinrt_helpers.h>
 
 #include "winrt/UICppWinRT.h"
-
-#include <winrt/UICsWinRT.h>
-#include <winrt/UICsWinRT.UICsWinRT_XamlTypeInfo.h>
