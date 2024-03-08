@@ -1,11 +1,7 @@
-# wasdk-cs-views-leak
-Windows App SDK sample apps demonstrating a leak when C# XAML pages are assigned and unassigned from Window.Content when Window was created on a new thread.
+This repo showcases failures when multiple windows are opened around the same time with the Windows App SDK v1.5.
 
-![image](https://github.com/SamChaps/wasdk-cs-page-leak/assets/16784153/e492c44b-28f8-4413-a72c-2efb7e531f84)
-
-## Description
-- We force garbage collection and finalizers to run to quickly hit C# objects finalizers.
-- We expect C# XAML pages to get finalized once the Window.Content is set to null.
-- When creating a Window on the main thread, this always happens quickly.
-- When creating a Window on a new thread, this almost never happens for C# pages.
-- However, C++/WinRT pages always destroyed even if the Window was created on a new thread.
+## Repro steps
+1. Clone repo.
+2. Open multi-window-hang.sln.
+3. Build and launch the app (issue seems to repro in both Debug & Release).
+4. In the app, pressing the red button will lead to either an unexpected wrong thread exception or one of the windows will open successfully while the other fails to.
